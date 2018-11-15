@@ -1,9 +1,10 @@
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.List;
 
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
 
 public class MovieInformationExtractorTest {
 
@@ -37,6 +38,16 @@ public class MovieInformationExtractorTest {
 		String movieURLExpected = "https://www.rottentomatoes.com/m/the_ballad_of_buster_scruggs/";
 		String movieURLActual = movieInformationExtractor.getMovieURL();
 		assertEquals(movieURLExpected, movieURLActual);
+	}
+	
+	@Test
+	public void getAllOutGoingLinksTest() throws IOException { 
+		List<String> outLinks = movieInformationExtractor.getAllOutGoingLinks();
+		for (String link : outLinks) {
+			if (link.startsWith(MovieSiteCrawler.MOVIE_DOMAIN)) {
+				System.out.println(link);
+			}
+		}
 	}
 	
 }
