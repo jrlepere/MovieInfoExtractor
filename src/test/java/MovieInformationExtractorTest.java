@@ -32,4 +32,11 @@ public class MovieInformationExtractorTest {
 		assertEquals(movieTitleExpected, movieTitleActual);
 	}
 	
+	@Test
+	public void getMovieURLTest() throws IOException { 
+		String movieURLExpected = "https://www.rottentomatoes.com/m/the_ballad_of_buster_scruggs/";
+		String movieURLActual = movieInformationExtractor.getMovieURL();
+		assertEquals(movieURLExpected, movieURLActual);
+	}
+	
 }

@@ -19,4 +19,8 @@ public class MovieInformationExtractor {
 		return this.movieDocument.select("meta[property=og:title]").get(0).attr("content");
 	}
 	
+	public String getMovieURL() {
+		return this.movieDocument.select("meta[property=og:url]").get(0).attr("content");
+	}
+	
 }
