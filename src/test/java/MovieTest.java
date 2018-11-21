@@ -5,12 +5,15 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
+import movie_extractor.Movie;
+import movie_extractor.MovieInformationExtractor;
+
 public class MovieTest {
 
 	Movie movie;
 	
 	@Before
-	public void setMovie() throws IOException {
+	public void setMovie() throws IOException, InterruptedException {
 		movie = new MovieInformationExtractor("https://www.rottentomatoes.com/m/toy_story_3/").getMovieInfo();
 	}
 	

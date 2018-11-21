@@ -7,12 +7,14 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import movie_extractor.MovieInformationExtractor;
+
 public class MovieInformationExtractorTest {
 
 	private MovieInformationExtractor movieInformationExtractor;
 	
 	@Before
-	public void loadMovieInformationExtractor() throws IOException {
+	public void loadMovieInformationExtractor() throws IOException, InterruptedException {
 		this.movieInformationExtractor = new MovieInformationExtractor(
 				"https://www.rottentomatoes.com/m/the_ballad_of_buster_scruggs");
 	}

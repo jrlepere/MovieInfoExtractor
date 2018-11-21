@@ -1,5 +1,5 @@
+package movie_extractor;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,9 +16,11 @@ import org.jsoup.select.Elements;
 public class MovieInformationExtractor {
 
 	private Document movieDocument;
+	private String url;
 	
-	public MovieInformationExtractor(String rottenTomatoesURL) throws IOException {
+	public MovieInformationExtractor(String rottenTomatoesURL) throws IOException, InterruptedException {
 		this.movieDocument = Jsoup.connect(rottenTomatoesURL).timeout(30*1000).get();
+		this.url = rottenTomatoesURL;
 	}
 	
 	public Movie getMovieInfo() {
@@ -58,11 +60,7 @@ public class MovieInformationExtractor {
 	}
 	
 	public String getMovieURL() {
-		try {
-			return this.movieDocument.select("meta[property=og:url]").get(0).attr("content");
-		} catch (Exception e) {
-			return "NA";
-		}
+		return url;
 	}
 	
 	public String getMovieRating() {
@@ -81,8 +79,11 @@ public class MovieInformationExtractor {
 			}
 			return cast;
 		} catch (Exception e) {
-			cast.add("NA");
-			System.out.println(e.getMessage());
+			try {
+				return new MovieInformationExtractor(url).getMovieCast();
+			} catch (Exception e1) {
+				System.out.println(e1.getMessage());
+			}
 			return cast;
 		}
 	}

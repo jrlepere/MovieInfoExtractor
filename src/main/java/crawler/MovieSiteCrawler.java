@@ -1,5 +1,4 @@
-import java.io.File;
-import java.io.FileWriter;
+package crawler;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,6 +11,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import movie_extractor.Movie;
+import movie_extractor.MovieInformationExtractor;
+import movie_saver.MovieSaver;
 
 /**
  * Rotten tomatoes site crawler for extracting movie information.
@@ -26,16 +29,16 @@ public class MovieSiteCrawler {
 	private Queue<String> urlFrontier;
 	private Set<String> visitedURLs;
 	private int totalMoviesToCrawl;
-	private List<String> elasticSearchBulkEntries;
+	private MovieSaver movieSaver;
 	
-	public MovieSiteCrawler(List<String> seedURLs, int totalMoviesToCrawl) {
+	public MovieSiteCrawler(List<String> seedURLs, int totalMoviesToCrawl, MovieSaver movieSaver) {
 		this.urlFrontier = new LinkedList<String>(seedURLs);
 		this.totalMoviesToCrawl = totalMoviesToCrawl;
 		this.visitedURLs = new HashSet<String>(1021);
-		this.elasticSearchBulkEntries = new LinkedList<String>();
+		this.movieSaver = movieSaver;
 	}
 	
-	public void crawl(String resultFilename) throws InterruptedException, IOException {
+	public void crawl() throws InterruptedException, IOException {
 		int numMoviesCrawled = 0;
 		while (numMoviesCrawled < this.totalMoviesToCrawl && !this.urlFrontier.isEmpty()) {
 			String movieURL = urlFrontier.remove();
@@ -49,16 +52,7 @@ public class MovieSiteCrawler {
 			}
 			TimeUnit.SECONDS.sleep(SLEEP_TIME);
 		}
-		saveElasticSearchBulkEntries(resultFilename);
-	}
-	
-	public void saveElasticSearchBulkEntries(String filename) throws IOException {
-		FileWriter writer = new FileWriter(new File(filename));
-		for (String elasticSearchEntry : elasticSearchBulkEntries) {
-			writer.write(elasticSearchEntry);
-			writer.write("\n");
-		}
-		writer.close();
+		movieSaver.close();
 	}
 	
 	public boolean handleMovieURL(String url) {
@@ -67,7 +61,7 @@ public class MovieSiteCrawler {
 			addAllAcceptableURLsToFrontier(getAllOutGoingLinks(url));
 			if (isAcceptableMovieURL(url)) {
 				MovieInformationExtractor movieInfoExtractor = new MovieInformationExtractor(url);
-				addMovieToElasticSearchBulkList(movieInfoExtractor.getMovieInfo());
+				saveMovie(movieInfoExtractor.getMovieInfo());
 				return true;
 			}
 		} catch (Exception e) {
@@ -76,8 +70,8 @@ public class MovieSiteCrawler {
 		return false;
 	}
 	
-	public void addMovieToElasticSearchBulkList(Movie m) {
-		this.elasticSearchBulkEntries.add(m.getElasticSearchPostBulkEntry());
+	public void saveMovie(Movie m) {
+		movieSaver.saveMovie(m);
 	}
 	
 	public void addAllAcceptableURLsToFrontier(List<String> urls) {
