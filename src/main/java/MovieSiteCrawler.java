@@ -22,7 +22,7 @@ public class MovieSiteCrawler {
 	
 	public static final String SITE_DOMAIN = "https://www.rottentomatoes.com/";
 	public static final String MOVIE_DOMAIN = "https://www.rottentomatoes.com/m/";
-	private static final int SLEEP_TIME = 1; // seconds
+	private static final int SLEEP_TIME = 0; // seconds
 	private Queue<String> urlFrontier;
 	private Set<String> visitedURLs;
 	private int totalMoviesToCrawl;
@@ -39,6 +39,9 @@ public class MovieSiteCrawler {
 		int numMoviesCrawled = 0;
 		while (numMoviesCrawled < this.totalMoviesToCrawl && !this.urlFrontier.isEmpty()) {
 			String movieURL = urlFrontier.remove();
+			if (visitedURLs.contains(movieURL)) {
+				continue;
+			}
 			boolean success = handleMovieURL(movieURL);
 			if (success) {
 				System.out.println("complete: " + movieURL);
@@ -68,7 +71,7 @@ public class MovieSiteCrawler {
 				return true;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage() + ": " + url);
 		}
 		return false;
 	}
@@ -79,8 +82,7 @@ public class MovieSiteCrawler {
 	
 	public void addAllAcceptableURLsToFrontier(List<String> urls) {
 		for (String url : extractAcceptableAndUniqueURLs(urls)) {
-			if (!urlFrontier.contains(url)
-					&& !visitedURLs.contains(url)) {
+			if (!visitedURLs.contains(url)) {
 				urlFrontier.add(url);
 			}
 		}
@@ -121,7 +123,7 @@ public class MovieSiteCrawler {
 	}
 	
 	public List<String> getAllOutGoingLinks(String url) throws IOException {
-		Document doc = Jsoup.connect(url).get();
+		Document doc = Jsoup.connect(url).timeout(30*1000).get();
 		List<String> allOutGoingLinks = new LinkedList<String>();
 		Elements links = doc.select("a[href]");
 		for (Element link : links) {

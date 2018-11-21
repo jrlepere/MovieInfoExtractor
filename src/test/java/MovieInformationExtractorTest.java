@@ -1,6 +1,7 @@
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Before;
@@ -41,13 +42,35 @@ public class MovieInformationExtractorTest {
 	}
 	
 	@Test
+	public void getMovieRatingTest() throws IOException { 
+		String movieRatingExpected = "93%";
+		String movieRatingActual = movieInformationExtractor.getMovieRating();
+		assertEquals(movieRatingExpected, movieRatingActual);
+	}
+	
+	@Test
+	public void getMovieCastTest() throws IOException { 
+		List<String> movieRatingExpected = new LinkedList<String>();
+		movieRatingExpected.add("Tim Blake Nelson");
+		movieRatingExpected.add("Bill Heck");
+		movieRatingExpected.add("James Franco");
+		movieRatingExpected.add("Liam Neeson");
+		movieRatingExpected.add("Zoe Kazan");
+		movieRatingExpected.add("Tom Waits");
+		movieRatingExpected.add("Tyne Daly");
+		movieRatingExpected.add("Brendan Gleeson");
+		List<String> movieRatingActual = movieInformationExtractor.getMovieCast();
+		assertEquals(movieRatingExpected, movieRatingActual);
+	}
+	
+	@Test
 	public void getAllOutGoingLinksTest() throws IOException { 
-		List<String> outLinks = movieInformationExtractor.getAllOutGoingLinks();
+		/*List<String> outLinks = movieInformationExtractor.getAllOutGoingLinks();
 		for (String link : outLinks) {
 			if (link.startsWith(MovieSiteCrawler.MOVIE_DOMAIN)) {
 				System.out.println(link);
 			}
-		}
+		}*/
 	}
 	
 }
