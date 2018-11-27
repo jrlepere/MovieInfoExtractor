@@ -38,14 +38,14 @@ public class MovieInformationExtractorTest {
 	
 	@Test
 	public void getMovieURLTest() throws IOException { 
-		String movieURLExpected = "https://www.rottentomatoes.com/m/the_ballad_of_buster_scruggs/";
+		String movieURLExpected = "https://www.rottentomatoes.com/m/the_ballad_of_buster_scruggs";
 		String movieURLActual = movieInformationExtractor.getMovieURL();
 		assertEquals(movieURLExpected, movieURLActual);
 	}
 	
 	@Test
 	public void getMovieRatingTest() throws IOException { 
-		String movieRatingExpected = "93%";
+		String movieRatingExpected = "92%";
 		String movieRatingActual = movieInformationExtractor.getMovieRating();
 		assertEquals(movieRatingExpected, movieRatingActual);
 	}
@@ -63,6 +63,15 @@ public class MovieInformationExtractorTest {
 		movieRatingExpected.add("Brendan Gleeson");
 		List<String> movieRatingActual = movieInformationExtractor.getMovieCast();
 		assertEquals(movieRatingExpected, movieRatingActual);
+	}
+	
+	@Test
+	public void getMovieImageURLTest() throws IOException { 
+		String movieURLExpected = "https://resizing.flixster.com/2Rh9gYOSbYcxkTKubiNiivgpwK0=/206x305/v1.bTsxMjg3MjM0ODtqOzE3OTIzOzEyMDA7NjUwOzk1MA";
+		String movieURLActual = movieInformationExtractor.getMovieImageURL();
+		System.out.println(movieURLActual);
+		System.out.println(movieURLExpected);
+		assertEquals(movieURLExpected, movieURLActual);
 	}
 	
 	@Test

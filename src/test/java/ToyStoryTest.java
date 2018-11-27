@@ -53,4 +53,13 @@ public class ToyStoryTest {
 		assertEquals(movieURLExpected, movieURLActual);
 	}
 	
+	@Test
+	public void getMovieImageURLTest() throws IOException { 
+		String movieURLExpected = "https://resizing.flixster.com/DVfvYOh3dqzkbWz_ADf5lVJgh7U=/206x305/v1.bTsxMTIxOTYyNDtqOzE3OTQ5OzEyMDA7MjI1MDszMDAw";
+		String movieURLActual = movieInformationExtractor.getMovieImageURL();
+		System.out.println(movieURLExpected);
+		System.out.println(movieURLActual);
+		assertEquals(movieURLExpected, movieURLActual);
+	}
+	
 }

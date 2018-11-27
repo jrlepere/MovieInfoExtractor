@@ -117,7 +117,7 @@ public class MovieSiteCrawler {
 	}
 	
 	public List<String> getAllOutGoingLinks(String url) throws IOException {
-		Document doc = Jsoup.connect(url).timeout(30*1000).get();
+		Document doc = Jsoup.connect(url).timeout(5*1000).get();
 		List<String> allOutGoingLinks = new LinkedList<String>();
 		Elements links = doc.select("a[href]");
 		for (Element link : links) {

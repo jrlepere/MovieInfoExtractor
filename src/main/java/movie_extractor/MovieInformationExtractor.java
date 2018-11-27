@@ -19,7 +19,7 @@ public class MovieInformationExtractor {
 	private String url;
 	
 	public MovieInformationExtractor(String rottenTomatoesURL) throws IOException, InterruptedException {
-		this.movieDocument = Jsoup.connect(rottenTomatoesURL).timeout(30*1000).get();
+		this.movieDocument = Jsoup.connect(rottenTomatoesURL).timeout(5*1000).get();
 		this.url = rottenTomatoesURL;
 	}
 	
@@ -29,13 +29,14 @@ public class MovieInformationExtractor {
 				getMovieDescription(),
 				getMovieURL(),
 				getMovieRating(),
-				getMovieCast());
+				getMovieCast(),
+				getMovieImageURL());
 	}
 	
 	public String getMovieDescription() {
 		try {
 			String description = this.movieDocument.select("meta[property=og:description]").get(0).attr("content");
-			if (!description.trim().isEmpty()) {
+			if (!description.trim().isEmpty() && description.length() > 25) {
 				return description;
 			} else {
 				description = this.movieDocument.select("meta[property=og:description]").get(0).toString();
@@ -85,6 +86,14 @@ public class MovieInformationExtractor {
 				System.out.println(e1.getMessage());
 			}
 			return cast;
+		}
+	}
+	
+	public String getMovieImageURL() {
+		try {
+			return this.movieDocument.select("meta[property=og:image]").get(0).attr("content");
+		} catch (Exception e) {
+			return "NA";
 		}
 	}
 	

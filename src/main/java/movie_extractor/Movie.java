@@ -2,6 +2,7 @@ package movie_extractor;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Movie object containing relevant movie information.
@@ -11,15 +12,21 @@ import com.google.gson.Gson;
 public class Movie {
 
 	private static final Gson GSON = new Gson();
-	private String title, description, url, rating;
-	private List<String> cast;
+	private String title, description, siteURL, rating, imageURL;
+	private String[] cast;
 	
-	public Movie(String title, String description, String url, String rating, List<String> cast) {
+	public Movie(String title, String description, String siteURL, String rating, List<String> cast, String imageURL) {
 		this.title = title;
 		this.description = description;
-		this.url = url;
+		this.siteURL = siteURL;
 		this.rating = rating;
-		this.cast = cast;
+		this.imageURL = imageURL;
+		this.cast = new String[cast.size()];
+		int i = 0;
+		for (String castMember : cast) {
+			this.cast[i] = "\"" + castMember + "\"";
+			i ++;
+		}
 	}
 	
 	/**
@@ -30,11 +37,11 @@ public class Movie {
 	 */
 	public String getElasticSearchPostBulkEntry() {
 		return "{\"index\":{\"_index\":\"movies\",\"_type\":\"movie\"}}"
-		+  "\n" + GSON.toJson(this);
+				+  "\n" + new GsonBuilder().disableHtmlEscaping().create().toJson(this);
 	}
 	
 	public String toString() {
-		return GSON.toJson(this);
+		return new GsonBuilder().disableHtmlEscaping().create().toJson(this);
 	}
 	
 }
